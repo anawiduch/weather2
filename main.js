@@ -37,15 +37,22 @@ function showCard({name, country,temp, icon, text}) {
                         header.insertAdjacentHTML('afterend',html);
                     }
 
-async function getWeather(city){
+    async function getWeather(city) {
         const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
-        const response =await fetch(url);
-        const data = await response.json();
-        console.log(data);
-        return data;
-        
-    }
-
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.error('Fetch error: ', error);
+            throw error;  
+        }
+    }                
+                    
 /* The way of getting submit*/
 form.onsubmit = async function (e) {
     
