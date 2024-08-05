@@ -59,8 +59,15 @@ form.onsubmit = async function (e) {
     e.preventDefault();
 
     let city= input.value.trim();
+
+    if (!city) {
+        removeCard();
+        showError("Please enter a city name.");
+        return;
+    }
     
-    const data = await getWeather(city);
+    try { 
+        const data = await getWeather(city);
 
     if (data.error) {
             removeCard();
@@ -77,11 +84,13 @@ form.onsubmit = async function (e) {
             icon : data.current.condition.icon,
             text : data.current.condition.text
 
-
          };
         showCard(weatherData);
             }
 
-    
-}
+        } catch (error){
+            removeCard();
+            showError("An error occurred while fetching the weather data. Please try again.");
+        }
+    };
 
